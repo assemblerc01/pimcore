@@ -94,6 +94,10 @@ final class Application extends \Symfony\Bundle\FrameworkBundle\Console\Applicat
                 $kernel->getContainer()->get(FilteredMigrationsRepository::class)->setPrefix($prefix);
                 $kernel->getContainer()->get(FilteredTableMetadataStorage::class)->setPrefix($prefix);
             }
+
+            if ($event->getInput()->getOption('foobar-mode')) {
+                $event->getOutput()->writeln('<bg=green>We\'re in foobar mode!</>');
+            }
         });
 
         $dispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) use ($maintenanceModeHelper) {
@@ -117,6 +121,7 @@ final class Application extends \Symfony\Bundle\FrameworkBundle\Console\Applicat
         $inputDefinition = parent::getDefaultInputDefinition();
         $inputDefinition->addOption(new InputOption('ignore-maintenance-mode', null, InputOption::VALUE_NONE, 'Set this flag to force execution in maintenance mode'));
         $inputDefinition->addOption(new InputOption('maintenance-mode', null, InputOption::VALUE_NONE, 'Set this flag to force maintenance mode while this task runs'));
+        $inputDefinition->addOption(new InputOption('foobar-mode', null, InputOption::VALUE_NONE, 'Puts Pimcore app into foobar mode'));
 
         return $inputDefinition;
     }
